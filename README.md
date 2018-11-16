@@ -21,3 +21,6 @@ Text analysis for the following speeches:
 - The Struggle for Human Rights (1948)
 
 <img width="932" alt="speeches" src="https://user-images.githubusercontent.com/37122520/48644852-d2e2f900-e9db-11e8-83fe-21a272dcb4e3.png">
+
+
+For [RPubs link](http://rpubs.com/Juanma7/440421). Resolution is not great.
