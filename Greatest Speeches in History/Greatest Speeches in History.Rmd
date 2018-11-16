@@ -252,7 +252,7 @@ Column {data-width=200, data-height=200}
 
 ###
 
-**I have a dream - Martin Luther King, Jr.**
+**"I have a dream" - Martin Luther King, Jr.**
 
 Delivered by Martin Luther King, Jr. on 28 August 1963, at the Lincoln Memorial, Washington D.C.
 
@@ -262,7 +262,7 @@ In his most famous speech,  Martin Luther King, Jr stood on the steps of the Lin
 
 ###
 
-**Our God Is Marching On - Martin Luther King, Jr.**
+**"Our God Is Marching On" - Martin Luther King, Jr.**
 
 "Our God Is Marching On!" Reverend Martin Luther King, Jr. Speech, March 25, 1965
 
@@ -270,7 +270,7 @@ In his most famous speech,  Martin Luther King, Jr stood on the steps of the Lin
 Column {data-width=800, data-height=800}
 -------------------------------------
 
-### I have a dream - Martin Luther King, Jr.
+### "I have a dream" - Martin Luther King, Jr.
 
 ```{r echo=FALSE}
 
@@ -283,7 +283,7 @@ title(main = " ", font.main = 1, col.main = "cornsilk3", cex.main = 1.5)
 
 
 
-### Our God Is Marching On - Martin Luther King, Jr.
+### "Our God Is Marching On" - Martin Luther King, Jr.
 
 
 ```{r echo=FALSE}
@@ -305,7 +305,7 @@ Column {data-width=200, data-height=200}
 
 ###
   
-**I am prepared to die - Nelson Mandela**
+**"I am prepared to die" - Nelson Mandela**
   
   
 Nelson Mandela made this speech in court in 1964, just before he was sent to prison.
@@ -315,7 +315,7 @@ Nelson Mandela made this speech in court in 1964, just before he was sent to pri
 
 ###
 
-**A rainbow nation  - Nelson Mandela**
+**"A rainbow nation"  - Nelson Mandela**
   
 Inaugural Speech, Pretoria - Nelson Mandela - 10 May 1994
 
@@ -327,7 +327,7 @@ Column {data-width=800, data-height=800}
 -------------------------------------
   
 
-### I am prepared to die - Nelson Mandela
+### "I am prepared to die" - Nelson Mandela
   
 ```{r echo=FALSE}
 
@@ -342,7 +342,7 @@ title(main = " ", font.main = 1, col.main = "cornsilk3", cex.main = 1.5)
 
 
 
-### A rainbow nation - Nelson Mandela
+### "A rainbow nation" - Nelson Mandela
 
 
 ```{r echo=FALSE}
