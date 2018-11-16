@@ -1,0 +1,492 @@
+---
+title: "Greatest Speeches in History"
+author: "Juanma Martinez"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tm)
+library(SnowballC)
+library(wordcloud)
+library(wordcloud2)
+library(RColorBrewer)
+
+#(colour)[https://moderndata.plot.ly/create-colorful-graphs-in-r-with-rcolorbrewer-and-plotly/]
+
+# https://www.r-graph-gallery.com/wordcloud/
+
+### Set directory
+I_have_a_dream <- readLines("I_have_a_dream.txt")
+
+The_Struggle_for_Human_Rights <- readLines("The_Struggle_for_Human_Rights.txt")
+
+I_am_prepared_to_die <- readLines("I_am_prepared_to_die.txt")
+
+yes_we_can <- readLines("yes_we_can.txt")
+
+Our_God_Is_Marching_On <- readLines("Our_God_Is_Marching_On.txt")
+
+a_rainbow_nation <- readLines("a_rainbow_nation.txt")
+
+Obama_Inaugural_Address <- readLines("Obama_Inaugural_Address.txt")
+
+
+# Corpus
+
+I_have_a_dreamCorpus <- Corpus(VectorSource(I_have_a_dream))
+The_Struggle_for_Human_RightsCorpus <- Corpus(VectorSource(The_Struggle_for_Human_Rights))
+I_am_prepared_to_dieCorpus <- Corpus(VectorSource(I_am_prepared_to_die))
+yes_we_canCorpus <- Corpus(VectorSource(yes_we_can))
+Our_God_Is_Marching_OnCorpus <- Corpus(VectorSource(Our_God_Is_Marching_On))
+a_rainbow_nationCorpus <- Corpus(VectorSource(a_rainbow_nation))
+Obama_Inaugural_AddressCorpus <- Corpus(VectorSource(Obama_Inaugural_Address))
+
+
+# Next, we will convert the corpus to a plain text document.
+
+I_have_a_dreamCorpus <- tm_map(I_have_a_dreamCorpus , PlainTextDocument)
+
+The_Struggle_for_Human_RightsCorpus <- tm_map(The_Struggle_for_Human_RightsCorpus , PlainTextDocument)
+
+I_am_prepared_to_dieCorpus <- tm_map(I_am_prepared_to_dieCorpus , PlainTextDocument)
+yes_we_canCorpus <- tm_map(yes_we_canCorpus , PlainTextDocument)
+
+Our_God_Is_Marching_OnCorpus <- tm_map(Our_God_Is_Marching_OnCorpus , PlainTextDocument)
+
+a_rainbow_nationCorpus <- tm_map(a_rainbow_nationCorpus , PlainTextDocument)
+
+Obama_Inaugural_AddressCorpus <- tm_map(Obama_Inaugural_AddressCorpus , PlainTextDocument)
+
+
+###############################  Step 2: Text transformation
+
+toSpace <- content_transformer(function (x , pattern ) gsub(pattern, " ", x))
+
+I_have_a_dreamCorpus <- tm_map(I_have_a_dreamCorpus, toSpace, "/")
+I_have_a_dreamCorpus<- tm_map(I_have_a_dreamCorpus, toSpace, "@")
+I_have_a_dreamCorpus<- tm_map(I_have_a_dreamCorpus, toSpace, "\\|")
+
+
+The_Struggle_for_Human_RightsCorpus<- tm_map(The_Struggle_for_Human_RightsCorpus, toSpace, "/")
+The_Struggle_for_Human_RightsCorpus <- tm_map(The_Struggle_for_Human_RightsCorpus, toSpace, "@")
+The_Struggle_for_Human_RightsCorpus <- tm_map(The_Struggle_for_Human_RightsCorpus, toSpace, "\\|")
+
+I_am_prepared_to_dieCorpus <- tm_map(I_am_prepared_to_dieCorpus, toSpace, "/")
+I_am_prepared_to_dieCorpus<- tm_map(I_am_prepared_to_dieCorpus, toSpace, "@")
+I_am_prepared_to_dieCorpus<- tm_map(I_am_prepared_to_dieCorpus, toSpace, "\\|")
+
+
+yes_we_canCorpus<- tm_map(yes_we_canCorpus, toSpace, "/")
+yes_we_canCorpus <- tm_map(yes_we_canCorpus, toSpace, "@")
+yes_we_canCorpus <- tm_map(yes_we_canCorpus, toSpace, "\\|")
+
+Our_God_Is_Marching_OnCorpus<- tm_map(Our_God_Is_Marching_OnCorpus, toSpace, "/")
+Our_God_Is_Marching_OnCorpus <- tm_map(Our_God_Is_Marching_OnCorpus, toSpace, "@")
+Our_God_Is_Marching_OnCorpus <- tm_map(Our_God_Is_Marching_OnCorpus, toSpace, "\\|")
+
+a_rainbow_nationCorpus<- tm_map(a_rainbow_nationCorpus, toSpace, "/")
+a_rainbow_nationCorpus <- tm_map(a_rainbow_nationCorpus, toSpace, "@")
+a_rainbow_nationCorpus <- tm_map(a_rainbow_nationCorpus, toSpace, "\\|")
+
+Obama_Inaugural_AddressCorpus<- tm_map(Obama_Inaugural_AddressCorpus, toSpace, "/")
+Obama_Inaugural_AddressCorpus <- tm_map(Obama_Inaugural_AddressCorpus, toSpace, "@")
+Obama_Inaugural_AddressCorpus <- tm_map(Obama_Inaugural_AddressCorpus, toSpace, "\\|")
+
+###############################  Step 3: Cleaning the text
+
+# Convert the text to lower case
+I_have_a_dreamCorpus <- tm_map(I_have_a_dreamCorpus, content_transformer(tolower))
+
+The_Struggle_for_Human_RightsCorpus <- tm_map(The_Struggle_for_Human_RightsCorpus, content_transformer(tolower))
+
+I_am_prepared_to_dieCorpus <- tm_map(I_am_prepared_to_dieCorpus, content_transformer(tolower))
+
+yes_we_canCorpus <- tm_map(yes_we_canCorpus, content_transformer(tolower))
+
+Our_God_Is_Marching_OnCorpus <- tm_map(Our_God_Is_Marching_OnCorpus, content_transformer(tolower))
+
+a_rainbow_nationCorpus <- tm_map(a_rainbow_nationCorpus, content_transformer(tolower))
+
+Obama_Inaugural_AddressCorpus <- tm_map(Obama_Inaugural_AddressCorpus, content_transformer(tolower))
+
+
+# Remove numbers
+I_have_a_dreamCorpus <- tm_map(I_have_a_dreamCorpus, removeNumbers)
+The_Struggle_for_Human_RightsCorpus <- tm_map(The_Struggle_for_Human_RightsCorpus, removeNumbers)
+
+I_am_prepared_to_dieCorpus <- tm_map(I_am_prepared_to_dieCorpus, removeNumbers)
+yes_we_canCorpus <- tm_map(yes_we_canCorpus, removeNumbers)
+
+Our_God_Is_Marching_OnCorpus <- tm_map(Our_God_Is_Marching_OnCorpus, removeNumbers)
+a_rainbow_nationCorpus <- tm_map(a_rainbow_nationCorpus, removeNumbers)
+
+Obama_Inaugural_AddressCorpus <- tm_map(Obama_Inaugural_AddressCorpus, removeNumbers)
+
+
+# Remove english common stopwords
+I_have_a_dreamCorpus<- tm_map(I_have_a_dreamCorpus, removeWords, stopwords("english"))
+The_Struggle_for_Human_RightsCorpus<- tm_map(The_Struggle_for_Human_RightsCorpus, removeWords, stopwords("english"))
+I_am_prepared_to_dieCorpus<- tm_map(I_am_prepared_to_dieCorpus, removeWords, stopwords("english"))
+yes_we_canCorpus<- tm_map(yes_we_canCorpus, removeWords, stopwords("english"))
+Our_God_Is_Marching_OnCorpus<- tm_map(Our_God_Is_Marching_OnCorpus, removeWords, stopwords("english"))
+a_rainbow_nationCorpus<- tm_map(a_rainbow_nationCorpus, removeWords, stopwords("english"))
+
+Obama_Inaugural_AddressCorpus<- tm_map(Obama_Inaugural_AddressCorpus, removeWords, stopwords("english"))
+
+# Remove your own stop word
+# specify your stopwords as a character vector
+I_have_a_dreamCorpus<- tm_map(I_have_a_dreamCorpus, removeWords, c("blabla1", "blabla2")) 
+The_Struggle_for_Human_RightsCorpus<- tm_map(The_Struggle_for_Human_RightsCorpus, removeWords, c("blabla1", "blabla2")) 
+I_am_prepared_to_dieCorpus<- tm_map(I_am_prepared_to_dieCorpus, removeWords, c("blabla1", "blabla2")) 
+yes_we_canCorpus<- tm_map(yes_we_canCorpus, removeWords, c("blabla1", "blabla2")) 
+
+Our_God_Is_Marching_OnCorpus<- tm_map(Our_God_Is_Marching_OnCorpus, removeWords, c("blabla1", "blabla2")) 
+
+a_rainbow_nationCorpus<- tm_map(a_rainbow_nationCorpus, removeWords, c("blabla1", "blabla2")) 
+
+Obama_Inaugural_AddressCorpus<- tm_map(Obama_Inaugural_AddressCorpus, removeWords, c("blabla1", "blabla2")) 
+
+
+# Remove punctuations
+I_have_a_dreamCorpus <- tm_map(I_have_a_dreamCorpus, removePunctuation)
+The_Struggle_for_Human_RightsCorpus <- tm_map(The_Struggle_for_Human_RightsCorpus, removePunctuation)
+I_am_prepared_to_dieCorpus <- tm_map(I_am_prepared_to_dieCorpus, removePunctuation)
+yes_we_canCorpus <- tm_map(yes_we_canCorpus, removePunctuation)
+
+Our_God_Is_Marching_OnCorpus <- tm_map(Our_God_Is_Marching_OnCorpus, removePunctuation)
+
+a_rainbow_nationCorpus <- tm_map(a_rainbow_nationCorpus, removePunctuation)
+
+Obama_Inaugural_AddressCorpus <- tm_map(Obama_Inaugural_AddressCorpus, removePunctuation)
+
+
+
+# Eliminate extra white spaces
+I_have_a_dreamCorpus <- tm_map(I_have_a_dreamCorpus, stripWhitespace)
+The_Struggle_for_Human_RightsCorpus <- tm_map(The_Struggle_for_Human_RightsCorpus, stripWhitespace)
+
+I_am_prepared_to_dieCorpus <- tm_map(I_am_prepared_to_dieCorpus, stripWhitespace)
+yes_we_canCorpus <- tm_map(yes_we_canCorpus, stripWhitespace)
+
+Our_God_Is_Marching_OnCorpus <- tm_map(Our_God_Is_Marching_OnCorpus, stripWhitespace)
+
+a_rainbow_nationCorpus <- tm_map(a_rainbow_nationCorpus, stripWhitespace)
+
+Obama_Inaugural_AddressCorpus <- tm_map(Obama_Inaugural_AddressCorpus, stripWhitespace)
+
+
+# Eliminate extra the, this
+I_have_a_dreamCorpus <- tm_map(I_have_a_dreamCorpus, removeWords, c('the', 'this', 'applause', stopwords('english')))
+The_Struggle_for_Human_RightsCorpus <- tm_map(The_Struggle_for_Human_RightsCorpus, removeWords, c('the', 'this', 'applause', stopwords('english')))
+I_am_prepared_to_dieCorpus <- tm_map(I_am_prepared_to_dieCorpus, removeWords, c('the', 'this', 'applause', stopwords('english')))
+yes_we_canCorpus <- tm_map(yes_we_canCorpus, removeWords, c('the', 'this', 'applause', stopwords('english')))
+
+Our_God_Is_Marching_OnCorpus <- tm_map(Our_God_Is_Marching_OnCorpus, removeWords, c('the', 'this', 'applause', stopwords('english')))
+
+a_rainbow_nationCorpus <- tm_map(a_rainbow_nationCorpus, removeWords, c('the', 'this', 'applause', stopwords('english')))
+
+Obama_Inaugural_AddressCorpus <- tm_map(Obama_Inaugural_AddressCorpus, removeWords, c('the', 'this', 'applause', stopwords('english')))
+
+############################### Step 4 : Build a term-document matrix
+
+dtmDream <- TermDocumentMatrix(I_have_a_dreamCorpus)
+m <- as.matrix(dtmDream)
+v <- sort(rowSums(m),decreasing=TRUE)
+dI_have_a_dream <- data.frame(word = names(v),freq=v)
+
+head(dI_have_a_dream, 30)
+
+dtmStruggle<- TermDocumentMatrix(The_Struggle_for_Human_RightsCorpus)
+m <- as.matrix(dtmStruggle)
+v <- sort(rowSums(m),decreasing=TRUE)
+dThe_Struggle_for_Human_Rights <- data.frame(word = names(v),freq=v)
+
+head(dThe_Struggle_for_Human_Rights, 30)
+
+dtmDie <- TermDocumentMatrix(I_am_prepared_to_dieCorpus)
+m <- as.matrix(dtmDie)
+v <- sort(rowSums(m),decreasing=TRUE)
+dI_am_prepared_to_die <- data.frame(word = names(v),freq=v)
+head(dI_am_prepared_to_die, 30)
+
+dtmFree <- TermDocumentMatrix(yes_we_canCorpus)
+m <- as.matrix(dtmFree)
+v <- sort(rowSums(m),decreasing=TRUE)
+dyes_we_can <- data.frame(word = names(v),freq=v)
+
+head(dyes_we_can, 30)
+
+dtmFree <- TermDocumentMatrix(Our_God_Is_Marching_OnCorpus)
+m <- as.matrix(dtmFree)
+v <- sort(rowSums(m),decreasing=TRUE)
+dOur_God_Is_Marching_On <- data.frame(word = names(v),freq=v)
+
+head(dOur_God_Is_Marching_On, 30)
+
+dtmFree <- TermDocumentMatrix(a_rainbow_nationCorpus)
+m <- as.matrix(dtmFree)
+v <- sort(rowSums(m),decreasing=TRUE)
+da_rainbow_nation <- data.frame(word = names(v),freq=v)
+
+head(da_rainbow_nation, 30)
+
+dtmFree <- TermDocumentMatrix(Obama_Inaugural_AddressCorpus)
+m <- as.matrix(dtmFree)
+v <- sort(rowSums(m),decreasing=TRUE)
+dObama_Inaugural_Address  <- data.frame(word = names(v),freq=v)
+
+head(dObama_Inaugural_Address, 30)
+
+
+```
+
+Martin Luther King, Jr  {data-orientation=rows}
+=====================================  
+
+Column {data-width=200, data-height=200}
+-------------------------------------
+
+###
+
+**I have a dream - Martin Luther King, Jr.**
+
+Delivered by Martin Luther King, Jr. on 28 August 1963, at the Lincoln Memorial, Washington D.C.
+
+
+In his most famous speech,  Martin Luther King, Jr stood on the steps of the Lincoln Memorial to deliver the speech before a crowd of more than 250,000 people.
+
+
+###
+
+**Our God Is Marching On - Martin Luther King, Jr.**
+
+"Our God Is Marching On!" Reverend Martin Luther King, Jr. Speech, March 25, 1965
+
+
+Column {data-width=800, data-height=800}
+-------------------------------------
+
+### I have a dream - Martin Luther King, Jr.
+
+```{r echo=FALSE}
+
+wordcloud(words = dI_have_a_dream$word, freq = dI_have_a_dream$freq, min.freq = 2,
+          max.words=200, random.order=FALSE,  
+          colors=brewer.pal(8, "Dark2"))
+
+title(main = " ", font.main = 1, col.main = "cornsilk3", cex.main = 1.5)
+```
+
+
+
+### Our God Is Marching On - Martin Luther King, Jr.
+
+
+```{r echo=FALSE}
+
+wordcloud(words = dOur_God_Is_Marching_On$word, freq = dOur_God_Is_Marching_On$freq, min.freq = 4,
+          max.words=200, random.order=FALSE, 
+          colors=brewer.pal(8, "Dark2"))
+
+title(main = " ", font.main = 1, col.main = "cornsilk3", cex.main = 1.5)
+
+```
+
+
+Nelson Mandela  {data-orientation=rows}
+=====================================  
+
+Column {data-width=200, data-height=200}
+-------------------------------------
+
+###
+  
+**I am prepared to die - Nelson Mandela**
+  
+  
+Nelson Mandela made this speech in court in 1964, just before he was sent to prison.
+
+"I am prepared to die" - Nelson Mandela's speech from the dock in the Rivonia Trial in which he said he was prepared to die for a democratic, non-racial South Africa.
+
+
+###
+
+**A rainbow nation  - Nelson Mandela**
+  
+Inaugural Speech, Pretoria - Nelson Mandela - 10 May 1994
+
+Nelson Mandela made this speech when he was made President of South Africa on 10 May 1994.
+
+
+
+Column {data-width=800, data-height=800}
+-------------------------------------
+  
+
+### I am prepared to die - Nelson Mandela
+  
+```{r echo=FALSE}
+
+wordcloud(words = dI_am_prepared_to_die$word, freq = dI_am_prepared_to_die$freq, min.freq = 3,
+          max.words=200, random.order=FALSE, 
+          colors=brewer.pal(9, "Paired"))
+
+
+title(main = " ", font.main = 1, col.main = "cornsilk3", cex.main = 1.5)
+
+```
+
+
+
+### A rainbow nation - Nelson Mandela
+
+
+```{r echo=FALSE}
+
+wordcloud(words = da_rainbow_nation$word, freq = da_rainbow_nation$freq, min.freq = 1,
+          max.words=200, random.order=FALSE, 
+          colors=brewer.pal(9, "Paired"))
+
+title(main = " ", font.main = 1, col.main = "cornsilk3", cex.main = 1.5)
+
+
+
+```
+
+
+Barack Obama  {data-orientation=rows}
+=====================================  
+  
+Column {data-width=200, data-height=200}
+-------------------------------------
+  
+###
+  
+**"Yes We Can" - Barack Obama**
+  
+Senator Barack Obama's speech to supporters after the New Hampshire primary. 10th January 2008
+
+
+###
+
+**Inaugural Address  - Barack Obama**
+  
+Obama Inaugural Address - 20th January 2009
+
+
+
+Column {data-width=800, data-height=800}
+-------------------------------------
+  
+### "Yes We Can" - Barack Obama
+  
+```{r echo=FALSE}
+
+wordcloud(words = dyes_we_can$word, freq = dyes_we_can$freq, min.freq = 1,
+          max.words=200, random.order=FALSE,  
+colors=brewer.pal(8, "Spectral"))
+
+title(main = " ", font.main = 1, col.main = "cornsilk3", cex.main = 1.5)
+```
+
+
+
+### Inaugural Address  - Barack Obama
+
+
+```{r echo=FALSE}
+
+wordcloud(words = dObama_Inaugural_Address$word, freq = dObama_Inaugural_Address$freq, min.freq = 2,
+          max.words=200, random.order=FALSE, 
+colors=brewer.pal(2, "GnBu"))
+
+title(main = " ", font.main = 1, col.main = "cornsilk3", cex.main = 1.5)
+
+
+```
+
+The_Struggle_for_Human_Rights {data-orientation=rows}
+=====================================  
+
+Column {data-width=800, data-height=750}
+-------------------------------------
+  
+### The Struggle for Human Rights (1948)
+
+**ELEANOR ROOSEVELT (1884-1962)** - [Biography](https://www.whitehouse.gov/about-the-white-house/first-ladies/anna-eleanor-roosevelt/)
+
+
+U.S. First Lady, Diplomat (1884-1962) 
+
+Longest-serving First Lady during her husband President Franklin D. Roosevelt's four terms in office (1933-1945).
+
+Eleanor Roosevelt delivered a speech in Paris (September 28, 1948) entitled "The Struggle for Human Rights," to persuade United Nations member states to vote for the Universal Declaration of Human Rights.
+
+
+
+
+
+
+**Universal Declaration of Human Rights** - [Link](http://www.un.org/en/universal-declaration-human-rights/)
+
+The Universal Declaration of Human Rights (UDHR) was proclaimed by the United Nations General Assembly in Paris on 10 December 1948.
+
+A historic document that states the basic rights and freedoms all human beings are entitled to. 
+The Declaration consists of an introduction and 30 Articles. 
+
+
+
+For full text - [link](https://www.ohchr.org/EN/UDHR/Documents/UDHR_Translations/eng.pdf)
+
+
+
+
+### The Struggle for Human Rights (1948)
+
+
+```{r echo=FALSE}
+
+wordcloud(words = dThe_Struggle_for_Human_Rights$word, freq = dThe_Struggle_for_Human_Rights$freq, min.freq = 2,
+          max.words=200, random.order=FALSE,  
+colors=brewer.pal(8, "Spectral"))
+
+title(main = " ", font.main = 1, col.main = "cornsilk3", cex.main = 1.5)
+
+
+```
+
+  
+Column {data-width=200, data-height=250}
+-------------------------------------
+  
+###
+  
+**R Packages used**
+  
+
+
+- flexdashboard
+- tm
+- SnowballC
+- wordcloud
+- RColorBrewer
+
+
+
+###
+
+**Code, questions and feedback**
+
+The code for this article is publish in my [github account](https://github.com/JuanmaMN).  
+
+
+For [RPubs link](http://rpubs.com/Juanma7/440421). Resolution is not great.
+
+Please feel free to reach out for any question or feedback.
+
+
+
