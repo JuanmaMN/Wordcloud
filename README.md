@@ -24,3 +24,5 @@ Text analysis for the following speeches:
 
 
 For [RPubs link](http://rpubs.com/Juanma7/440421). Resolution is not great.
+
+For [Personal site](https://juanmaintro.netlify.com/2019/04/14/greatest-speeches-in-history/)
