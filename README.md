@@ -1,3 +1,4 @@
+
 # Wordcloud
 
 
@@ -26,3 +27,25 @@ Text analysis for the following speeches:
 For [RPubs link](http://rpubs.com/Juanma7/440421). Resolution is not great.
 
 For [Personal site](https://juanmaintro.netlify.com/2019/04/14/greatest-speeches-in-history/)
+
+
+<br>
+
+## **Netflix Titles** 
+
+
+
+Code is available [here](https://github.com/JuanmaMN/TidyTuesday/blob/master/2021/April/TidyTuesday_19_4_2021.R)
+
+
+<br> 
+<br>
+<p align="center">
+
+<img width="938" alt="19-4-201" src="https://user-images.githubusercontent.com/37122520/115447935-f8aa0300-a210-11eb-8b33-577bbd8dceb0.png">
+</p>
+<br>
+
+<hr>
+
+
